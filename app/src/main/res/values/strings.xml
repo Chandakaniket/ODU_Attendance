@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">ODUAttendance</string>
+    <string name="title_activity_new">newActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="checkin_b">check in</string>
+    <string name="large_text">Attendance Marked</string>
+    <string name="checked_in">Checked-In</string>
+    <string name="check_in">QR Scan</string>
+    <string name="hint_wc">welcome {name}</string>
+    <string name="logo">logo</string>
+    <string name="midas_id">MIDAS ID:</string>
+    <string name="enter_midas_id">Enter MIDAS ID</string>
+    <string name="password">PASSWORD:</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="sign_in">LOGIN</string>
+    <string name="logo1">banner</string>
+    <string name="odu_banner">banner.</string>
+    <string name="password_hint">Enter password</string>
+    <string name="logout">Logout</string>
+    <string name="empty_list_text">No records found</string>
+    <string name="log_menu">History</string>
+    <string name="instruction">Find QR code available inside the classroom, scan them, to mark your attendance.</string>
+    <string name="classroom_check_in">CLASSROOM CHECK-IN</string>
+    <string name="signout">SIGNOUT</string>
+    <string name="select_date">SELECT DATE :-</string>
+</resources>
