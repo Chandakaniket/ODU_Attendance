@@ -1,1 +1,1 @@
-ODU Attendance Application by scanning QR_Code.
+ODU Attendance Application by using QR Scan.
