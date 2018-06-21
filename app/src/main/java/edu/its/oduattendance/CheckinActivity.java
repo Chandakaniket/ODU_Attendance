@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -39,7 +37,7 @@ public class CheckinActivity extends AppCompatActivity {
         Intent res=getIntent();
         final String midas_id=res.getStringExtra("midasid");
 
-        new RequestCsService().execute(midas_id);
+        new RequestStudentInfo().execute(midas_id);
 
 
         checkin.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +91,7 @@ public class CheckinActivity extends AppCompatActivity {
     }
 
 //After shibboleth login is done..
-    class RequestCsService extends AsyncTask<String, Integer, String> {
+    class RequestStudentInfo extends AsyncTask<String, Integer, String> {
 
         @Override
         protected void onPreExecute() {
@@ -118,7 +116,7 @@ public class CheckinActivity extends AppCompatActivity {
 
                 if (!json.isNull("details")){
 
-                    System.out.println("if condition passed");
+                    System.out.println("Valid JSON");
                     System.out.println( json.getJSONArray("details").getJSONObject(0).getString("email"));
 
                     id=json.getJSONArray("details").getJSONObject(0).getString("id");

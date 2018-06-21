@@ -52,7 +52,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         List<String> labels = new ArrayList<String>();
 
         // Select All Query
-        String selectQuery = "SELECT DISTINCT checkindate  FROM " + DataBaseHelper.TABLE_NAME + " WHERE midas_id='"+midas+"'";
+        String selectQuery = "SELECT DISTINCT checkindate  FROM " + DataBaseHelper.TABLE_NAME + " WHERE midas_id='" + midas+"'";
   //      String selectQuery = "SELECT DISTINCT checkindate  FROM " + DataBaseHelper.TABLE_NAME + " WHERE midas_id=" + "'achan007'";
 
         //String[] columns = new String[] { DataBaseHelper._ID,DataBaseHelper.midas_id, DataBaseHelper.response_code, DataBaseHelper.message, DataBaseHelper.c_date ,DataBaseHelper.c_time};

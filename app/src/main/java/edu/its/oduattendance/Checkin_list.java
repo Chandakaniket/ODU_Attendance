@@ -37,6 +37,7 @@ public class Checkin_list extends AppCompatActivity {
 
     final String[] from = new String[] {DataBaseHelper._ID, DataBaseHelper.response_code, DataBaseHelper.message, DataBaseHelper.c_time,DataBaseHelper.c_date};
 
+
     final int[] to = new int[] { R.id.id, R.id.status, R.id.title, R.id.desc,R.id.datedesc};
 
     @Override
@@ -66,6 +67,12 @@ public class Checkin_list extends AppCompatActivity {
                 // Get select item
                 int sid=dropdown.getSelectedItemPosition();
                 Toast.makeText(getBaseContext(), "Date selected : " + dates[sid],Toast.LENGTH_SHORT).show();
+                dbManager.open();
+                Cursor cursor1 = dbManager.datefetch(midas,dates[sid]);
+                adapter = new SimpleCursorAdapter(Checkin_list.this, R.layout.activity_checkin_list, cursor1, from, to, 0);
+                adapter.notifyDataSetChanged();
+                listView.setAdapter(adapter);
+                dbManager.close();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -90,6 +97,7 @@ public class Checkin_list extends AppCompatActivity {
 
 
     listView.setAdapter(adapter);
+    dbManager.close();
 
     }
 

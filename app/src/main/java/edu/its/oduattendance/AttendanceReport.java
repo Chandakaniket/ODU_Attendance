@@ -46,7 +46,7 @@ public class AttendanceReport  extends Activity {
         }
         else if(att_type.contains("TARDY")){
             att_res_text.setTextColor(Color.WHITE);
-            imageButton.setBackgroundResource(R.drawable.late);
+            imageButton.setBackgroundResource(R.drawable.tardy);
         }
         else if(att_type.contains("PRESENT")){
             att_res_text.setTextColor(Color.GREEN);

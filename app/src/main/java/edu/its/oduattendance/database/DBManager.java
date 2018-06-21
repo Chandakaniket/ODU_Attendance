@@ -52,30 +52,19 @@ public class DBManager {
         return cursor;
     }
 
-
-    public List<String> getAllLabels(){
-        List<String> labels = new ArrayList<String>();
-
-        // Select All Query
-        String selectQuery = "SELECT *  FROM " + DataBaseHelper.TABLE_NAME ;   //+" WHERE"+DataBaseHelper.midas_id+ "="+midas;
-
-        //String[] columns = new String[] { DataBaseHelper._ID,DataBaseHelper.midas_id, DataBaseHelper.response_code, DataBaseHelper.message, DataBaseHelper.c_date ,DataBaseHelper.c_time};
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                labels.add(cursor.getString(1));
-            } while (cursor.moveToNext());
+    public Cursor datefetch(String midas,String date) {
+        String[] columns = new String[] { DataBaseHelper._ID,DataBaseHelper.midas_id, DataBaseHelper.response_code, DataBaseHelper.message, DataBaseHelper.c_date ,DataBaseHelper.c_time};
+        //Cursor cursor = database.query(DataBaseHelper.TABLE_NAME, columns, null, null, null, null, null);
+        Cursor cursor = database.rawQuery("SELECT  * FROM "+DataBaseHelper.TABLE_NAME+" WHERE midas_id='"+midas+"'and checkindate='"+date+"'",null);
+        if (cursor != null) {
+            cursor.moveToFirst();
         }
+        return cursor;
 
-        // closing connection
-        cursor.close();
-        database.close();
-
-        // returning lables
-        return labels;
     }
+
+
+
+
 
 }
