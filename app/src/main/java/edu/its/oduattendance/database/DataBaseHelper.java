@@ -22,16 +22,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String message = "message";
     public static final String c_date = "checkindate";
     public static final String c_time = "checkintime";
+    public static String att_type="aimage";
 
     // Database Information
     static final String DB_NAME = "QR_Check1.db";
 
 
-    // database version
-    static final int DB_VERSION = 1;
+    // database version // Track DB version if a app uses new format.
+    static final int DB_VERSION = 2;
 
     // Creating table query
-    private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + midas_id + " TEXT NOT NULL, " + response_code + " TEXT NOT NULL, " + message + " TEXT NOT NULL, " + c_date +" TEXT, " + c_time + " TEXT);";
+    private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + midas_id + " TEXT NOT NULL, " + response_code + " TEXT NOT NULL, " + message + " TEXT NOT NULL, " + c_date +" TEXT, " + c_time + " TEXT, " + att_type + " TEXT);";
 
     public DataBaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

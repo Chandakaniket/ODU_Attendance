@@ -30,13 +30,14 @@ public class DBManager {
         dbHelper.close();
     }
 
-    public void insert(String midas_id,String response_code, String message, String date,String time) {
+    public void insert(String midas_id,String response_code, String message, String date,String time,int imgtype) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DataBaseHelper.midas_id,midas_id);
         contentValue.put(DataBaseHelper.response_code, response_code);
         contentValue.put(DataBaseHelper.message,message);
         contentValue.put(DataBaseHelper.c_date, date);
         contentValue.put(DataBaseHelper.c_time, time);
+        contentValue.put(DataBaseHelper.att_type,imgtype);
         database.insert(DataBaseHelper.TABLE_NAME, null, contentValue);
        dbHelper.close();
 

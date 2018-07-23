@@ -52,6 +52,7 @@ import edu.its.mobilevisionbarcodescanner.BarcodeRetriever;
 import edu.its.oduattendance.database.DBManager;
 
 import static edu.its.oduattendance.R.id.barcode;
+import static edu.its.oduattendance.R.id.image;
 
 
 public class QrScanActivity extends AppCompatActivity implements BarcodeRetriever {
@@ -169,7 +170,7 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
     }
 
     public void nfcscan(View view) {
-    }
+    }           //For NFC scanning
 
     private class sendRequest extends AsyncTask<String, Integer, String> {
 
@@ -199,34 +200,34 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
 
 
                 //Response codes PRESENT_INT = 1 , ABSENT_INT = 2 , TARDY_INT = 3 and UNKNOWN_ATTENDANCE_TYPE_INT = 99;
-                if (response_code.contains("99")||response_code.contains("2")) {
+                if (response_code.contains("1")) {
                     att_status="INVALID";
-                    dbManager.insert(midas_id,"INVALID", message, date,time);
+                    dbManager.insert(midas_id,"INVALID", message, date,time,R.drawable.invalid);
                     dbManager.close();
                 }
 
                 else if (response_code.contains("1")) {
                     att_status="PRESENT";
-                    dbManager.insert(midas_id,"PRESENT", message, date,time);
+                    dbManager.insert(midas_id,"PRESENT", message, date,time,R.drawable.present);
                     dbManager.close();
                 }
 
                 else if (response_code.contains("2")) {
                     att_status="ABSENT";
-                    dbManager.insert(midas_id,"ABSENT", message, date,time);
+                    dbManager.insert(midas_id,"ABSENT", message, date,time,R.drawable.absent);
                     dbManager.close();
                 }
 
                 else if (response_code.contains("3")) {
                     att_status="TARDY";
-                    dbManager.insert(midas_id,"TARDY", message, date,time);
+                    dbManager.insert(midas_id,"TARDY", message, date,time,R.drawable.tardy);
                     dbManager.close();
                 }
 
                 else
                 {
                     att_status=response_code;
-                    dbManager.insert(midas_id,"INVALID QR", message, date,time);
+                    dbManager.insert(midas_id,"INVALID QR", message, date,time,R.drawable.invalid);
                     dbManager.close();
                 }
 

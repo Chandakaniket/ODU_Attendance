@@ -35,10 +35,10 @@ public class Checkin_list extends AppCompatActivity {
 
     String midas;
 
-    final String[] from = new String[] {DataBaseHelper._ID, DataBaseHelper.response_code, DataBaseHelper.message, DataBaseHelper.c_time,DataBaseHelper.c_date};
+    final String[] from = new String[] { DataBaseHelper.response_code, DataBaseHelper.message, DataBaseHelper.c_time,DataBaseHelper.c_date,DataBaseHelper.att_type};
 
 
-    final int[] to = new int[] { R.id.id, R.id.status, R.id.title, R.id.desc,R.id.datedesc};
+    final int[] to = new int[] { R.id.status, R.id.title, R.id.desc,R.id.datedesc,R.id.pic};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +93,8 @@ public class Checkin_list extends AppCompatActivity {
 
 
   adapter = new SimpleCursorAdapter(this, R.layout.activity_checkin_list, cursor, from, to, 0);
+
+  //      SpecialAdapter adapter = new SpecialAdapter(this, R.layout.activity_checkin_list, cursor, from, to);
         adapter.notifyDataSetChanged();
 
 
