@@ -23,8 +23,8 @@
     <ImageButton
         android:id="@+id/checkin_button"
         style="@android:style/Widget.Material.Light.ImageButton"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
         android:layout_centerInParent="true"
         android:background="@drawable/trans_box"

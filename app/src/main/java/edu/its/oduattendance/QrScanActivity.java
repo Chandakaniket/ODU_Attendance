@@ -200,7 +200,7 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
 
 
                 //Response codes PRESENT_INT = 1 , ABSENT_INT = 2 , TARDY_INT = 3 and UNKNOWN_ATTENDANCE_TYPE_INT = 99;
-                if (response_code.contains("1")) {
+                if (response_code.contains("99")) {
                     att_status="INVALID";
                     dbManager.insert(midas_id,"INVALID", message, date,time,R.drawable.invalid);
                     dbManager.close();
