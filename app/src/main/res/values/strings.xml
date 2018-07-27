@@ -26,4 +26,7 @@
     <string name="signout">SIGNOUT</string>
     <string name="select_date">SELECT DATE :-</string>
     <string name="atttypeimg">attendance image icon</string>
+    <string name="date_sel_instruction">Date Selected is:-</string>
+    <string name="date_btn">Select Date</string>
+    <string name="date_tv">Select Date</string>
 </resources>

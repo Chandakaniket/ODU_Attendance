@@ -1,5 +1,7 @@
 package edu.its.oduattendance;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,18 +11,27 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.util.Calendar;
 import java.util.List;
 
 import edu.its.oduattendance.database.DBManager;
 import edu.its.oduattendance.database.DataBaseHelper;
 
 public class Checkin_list extends AppCompatActivity {
+
+    Button btn;
+    TextView d_tv;
+    int year_x,month_x,day_x;
+    static final int dialog_id=0;
 
 
     private DBManager dbManager;
@@ -29,9 +40,6 @@ public class Checkin_list extends AppCompatActivity {
 
     private SimpleCursorAdapter adapter;
 
-    Spinner dropdown;
-
-    String[] dates={"All","None"};
 
     String midas;
 
@@ -45,6 +53,12 @@ public class Checkin_list extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkin_list_blank);
 
+        final Calendar cal=Calendar.getInstance();
+        year_x=cal.get(Calendar.YEAR);
+        month_x=cal.get(Calendar.MONTH);
+        day_x=cal.get(Calendar.DATE);
+        showDialogOnButtonClick();
+
         Toolbar toolbar= (Toolbar)findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
@@ -52,70 +66,76 @@ public class Checkin_list extends AppCompatActivity {
         midas=it.getStringExtra("midasid");
         System.out.print("Demo==========="+midas);
 
-        dropdown=(Spinner)findViewById(R.id.spinnerDate);
-
-//        dropdown.setOnItemClickListener((AdapterView.OnItemClickListener) this);
-
-        loadSpinnerData();
-
-
-
-        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
-                // Get select item
-                int sid=dropdown.getSelectedItemPosition();
-                Toast.makeText(getBaseContext(), "Date selected : " + dates[sid],Toast.LENGTH_SHORT).show();
-                dbManager.open();
-                Cursor cursor1 = dbManager.datefetch(midas,dates[sid]);
-                adapter = new SimpleCursorAdapter(Checkin_list.this, R.layout.activity_checkin_list, cursor1, from, to, 0);
-                adapter.notifyDataSetChanged();
-                listView.setAdapter(adapter);
-                dbManager.close();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-            }
-        });
-
-
-
-
-
-        dbManager = new DBManager(this);
-        dbManager.open();
-        Cursor cursor = dbManager.fetch(midas);
-
+        d_tv=(TextView)findViewById(R.id.date_tv);
         listView = (ListView) findViewById(R.id.list_view);
         listView.setEmptyView(findViewById(R.id.empty));
 
 
+
+       dbManager = new DBManager(this);
+
+
+        /*
+        dbManager.open();
+        Cursor cursor = dbManager.fetch(midas);
+
+
+
   adapter = new SimpleCursorAdapter(this, R.layout.activity_checkin_list, cursor, from, to, 0);
 
-  //      SpecialAdapter adapter = new SpecialAdapter(this, R.layout.activity_checkin_list, cursor, from, to);
-        adapter.notifyDataSetChanged();
+  adapter.notifyDataSetChanged();
 
 
     listView.setAdapter(adapter);
     dbManager.close();
-
+*/
     }
 
-    private void loadSpinnerData() {
+    public void showDialogOnButtonClick(){
 
-        DataBaseHelper db = new DataBaseHelper(getApplicationContext());
-
-        List<String> labels=db.getAllLabels(midas);
-
-        dates= labels.toArray(new String[0]);
-        ArrayAdapter<String> spadapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,labels);
-
-        dropdown.setAdapter(spadapter);
-
-
-
-
+        btn=(Button)findViewById(R.id.button2);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(dialog_id);
+            }
+        });
     }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        if(id==dialog_id){
+            return new DatePickerDialog(this,dpickerListener,year_x,month_x,day_x);
+        }
+
+
+        return null;
+    }
+
+    private DatePickerDialog.OnDateSetListener dpickerListener=new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            year_x=year;
+            month_x=month+1;
+            day_x=day;
+            Toast.makeText(Checkin_list.this,year_x+"/"+month_x+"/"+day_x,Toast.LENGTH_SHORT).show();
+
+            String date_s=month_x+"-"+day_x+"-"+year_x;
+
+            d_tv.setText(getString(R.string.date_sel_instruction)+date_s);
+
+            if(month_x<10) {
+                date_s="0"+date_s;        //Adjusting month, as in db month is storing in double digit
+            }
+
+            dbManager.open();
+            Cursor cursor1 = dbManager.datefetch(midas,date_s);
+            adapter = new SimpleCursorAdapter(Checkin_list.this, R.layout.activity_checkin_list, cursor1, from, to, 0);
+            adapter.notifyDataSetChanged();
+            listView.setAdapter(adapter);
+            dbManager.close();
+
+        }
+    };
+
 }
