@@ -46,7 +46,7 @@ public class DBManager {
     public Cursor fetch(String midas) {
         String[] columns = new String[] { DataBaseHelper._ID,DataBaseHelper.midas_id, DataBaseHelper.response_code, DataBaseHelper.message, DataBaseHelper.c_date ,DataBaseHelper.c_time};
         //Cursor cursor = database.query(DataBaseHelper.TABLE_NAME, columns, null, null, null, null, null);
-        Cursor cursor = database.rawQuery("SELECT  * FROM "+DataBaseHelper.TABLE_NAME+" WHERE midas_id='"+midas+"'",null);
+        Cursor cursor = database.rawQuery("SELECT  * FROM "+DataBaseHelper.TABLE_NAME+" WHERE midas_id='"+midas+"'ORDER BY _id DESC",null);
         if (cursor != null) {
             cursor.moveToFirst();
         }

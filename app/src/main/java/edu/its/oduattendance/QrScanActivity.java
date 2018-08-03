@@ -257,12 +257,16 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
         int responseCode=0;
         try {
 
-            URL url = new URL("https://esb.pprd.odu.edu:8443/attendance/0.0.1/attendance/submitAttendance");    //API Call to ESB
+           // URL url = new URL("https://esb.pprd.odu.edu:8443/attendance/0.0.1/attendance/submitAttendance");    //API Call to pre-prod ESB
+            URL url = new URL("https://esb.odu.edu:8443/attendance/1.0.0/attendance/submitAttendance");
+
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Accept","application/json");
             connection.setRequestProperty("Content-type","application/json");
-            connection.setRequestProperty("authorization","Bearer 7aa944938e65422940567beb3b86e8e1");
+           // connection.setRequestProperty("authorization","Bearer 7aa944938e65422940567beb3b86e8e1");  //Pre-prod auth auth
+
+            connection.setRequestProperty("authorization","Bearer 3cc5774636de84d79dfae878a4687a");
 
 
             connection.setDoOutput(true);

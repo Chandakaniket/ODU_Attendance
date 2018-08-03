@@ -75,7 +75,6 @@ public class Checkin_list extends AppCompatActivity {
        dbManager = new DBManager(this);
 
 
-        /*
         dbManager.open();
         Cursor cursor = dbManager.fetch(midas);
 
@@ -88,7 +87,6 @@ public class Checkin_list extends AppCompatActivity {
 
     listView.setAdapter(adapter);
     dbManager.close();
-*/
     }
 
     public void showDialogOnButtonClick(){
@@ -118,15 +116,20 @@ public class Checkin_list extends AppCompatActivity {
             year_x=year;
             month_x=month+1;
             day_x=day;
-            Toast.makeText(Checkin_list.this,year_x+"/"+month_x+"/"+day_x,Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(Checkin_list.this,year_x+"/"+month_x+"/"+day_x,Toast.LENGTH_SHORT).show();
 
             String date_s=month_x+"-"+day_x+"-"+year_x;
 
-            d_tv.setText(getString(R.string.date_sel_instruction)+date_s);
+            if(day_x<10){
+                date_s=month_x+"-0"+day_x+"-"+year_x;       //Adjusting day, as in db month is storing in double digit
+            }
 
             if(month_x<10) {
                 date_s="0"+date_s;        //Adjusting month, as in db month is storing in double digit
             }
+
+            d_tv.setText(getString(R.string.date_sel_instruction)+date_s);
+
 
             dbManager.open();
             Cursor cursor1 = dbManager.datefetch(midas,date_s);
