@@ -40,9 +40,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -60,6 +62,7 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
 
     private static final String TAG = "BarcodeMain";
     String midas_id;
+    private static String deploy;
     private DBManager dbManager;
 
 
@@ -72,6 +75,10 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_qr);
+
+
+        new checkDeploy_type().execute();
+
 
         dbManager = new DBManager(this);
         dbManager.open();
@@ -109,6 +116,7 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
         long epoch = System.currentTimeMillis();
 
 
+
         sendDataToServer(epoch,barcode.displayValue,midas_id);  //Sending Midas ID and scanned QR to server..
     }
 
@@ -137,7 +145,13 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
         final String json=formatDataAsJSON(formattedDate, displayValue, midas_id);
         System.out.println("Json created is:"+json);
 
+
+
         new sendRequest().execute(json);
+
+
+
+
     }
 
     @Override
@@ -244,6 +258,8 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
 
             startActivity(it);
             finish();
+
+
         }
     }
 
@@ -253,19 +269,33 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
         BufferedReader reader = null;
         StringBuffer buffer = new StringBuffer("");
         int responseCode=0;
+
+
+        new checkDeploy_type().execute();
+
+
         try {
+            if(deploy.equalsIgnoreCase("demo"))
+            {
+                URL url = new URL("https://esb.pprd.odu.edu:8443/attendance/0.0.1/attendance/submitAttendance");    //API Call to pre-prod ESB
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Accept","application/json");
+                connection.setRequestProperty("Content-type","application/json");
+                connection.setRequestProperty("authorization","Bearer 7aa944938e65422940567beb3b86e8e1");  //Pre-prod auth auth
 
-           // URL url = new URL("https://esb.pprd.odu.edu:8443/attendance/0.0.1/attendance/submitAttendance");    //API Call to pre-prod ESB
-            URL url = new URL("https://esb.odu.edu:8443/attendance/1.0.0/attendance/submitAttendance");
+                System.out.println("executing from pre-prod url");
+            }
+            else {
+                URL url = new URL("https://esb.odu.edu:8443/attendance/1.0.0/attendance/submitAttendance");
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setRequestProperty("Content-type", "application/json");
+                connection.setRequestProperty("authorization", "Bearer 3cc5774636de84d79dfae878a4687a");
 
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Accept","application/json");
-            connection.setRequestProperty("Content-type","application/json");
-           // connection.setRequestProperty("authorization","Bearer 7aa944938e65422940567beb3b86e8e1");  //Pre-prod auth auth
-
-            connection.setRequestProperty("authorization","Bearer 3cc5774636de84d79dfae878a4687a");
-
+                System.out.println("executing from prod url");
+            }
 
             connection.setDoOutput(true);
             DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
@@ -294,6 +324,61 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
         }
         return buffer.toString();
 
+    }
+
+    private static class checkDeploy_type extends AsyncTask<String, Integer, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String url="https://itsapps.odu.edu/services/f2f/status.json";
+            String result ;
+            String inputLine;
+
+            try{
+                URL deployurl=new URL(url);
+                HttpURLConnection connection=(HttpURLConnection) deployurl.openConnection();
+                connection.connect();
+
+                //Create a new InputStreamReader
+                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+
+                //Create a new buffered reader and String Builder
+                BufferedReader reader = new BufferedReader(streamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+
+                //Check if the line we are reading is not null
+                while((inputLine = reader.readLine()) != null){
+                    stringBuilder.append(inputLine);
+                }
+
+                result = stringBuilder.toString();
+
+            }catch (IOException e) {
+                e.printStackTrace();
+                result=null;
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            //  System.out.print("Deploy type  =  "+result);
+            try {
+                JSONObject json = new JSONObject(result);
+                System.out.print(json.getString("status"));
+                deploy=json.getString("status");
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 

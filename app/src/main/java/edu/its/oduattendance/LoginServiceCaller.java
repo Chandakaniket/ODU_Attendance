@@ -37,7 +37,7 @@ public class LoginServiceCaller {
             connection.setRequestProperty("Accept", "text/html;application/vnd.paos+xml");
             connection.setRequestProperty("PAOS", "ver='urn:liberty:paos:2003-08';'urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp'");
             int responseCode = connection.getResponseCode();
-            System.out.println("response code"+responseCode);
+            //      System.out.println("response code"+responseCode);
             if(responseCode==200) {
                 InputStream stream = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(stream));
@@ -110,14 +110,14 @@ public class LoginServiceCaller {
             DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
             List<NameValuePair> params=new ArrayList<>();
             params.add(new BasicNameValuePair("id",midas_id));
-            System.out.println(getQuery(params));
+            //        System.out.println(getQuery(params));
             wr.writeBytes(getQuery(params));
             wr.flush();
             wr.close();
 
 
             responseCode = connection.getResponseCode();
-            System.out.println("response code cs loginn" + responseCode);
+            //       System.out.println("response code cs loginn" + responseCode);
             InputStream stream=connection.getInputStream();
             reader=new BufferedReader(new InputStreamReader(stream));
 

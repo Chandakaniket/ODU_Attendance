@@ -20,7 +20,7 @@ import android.widget.EditText;
 public class MainActivity extends Activity {
 
     Button login_button;
-   public static String midas_id,password;
+    public static String midas_id,password;
     EditText midasId,Password;
     SharedPreferences sharedPreferences;
 
@@ -65,11 +65,11 @@ public class MainActivity extends Activity {
                 password = Password.getText().toString();
                 getLoginDetails(midas_id, password);
 
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("midasId",midas_id);
-                    editor.putString("password",password);
-                    editor.putString("rememberMe","true");
-                    editor.commit();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("midasId",midas_id);
+                editor.putString("password",password);
+                editor.putString("rememberMe","true");
+                editor.commit();
 //@ac
             }
         });
@@ -142,7 +142,7 @@ public class MainActivity extends Activity {
         }
         @Override
         protected void onPostExecute(String result) {
-            System.out.println(" MY requests, Response from odu: " + result);
+            //     System.out.println(" MY requests, Response from odu: " + result);
             new RequestShibbolethService().execute(result);
             dialog.cancel();
         }
@@ -194,3 +194,12 @@ public class MainActivity extends Activity {
         }
     }
 }
+
+
+
+
+
+
+
+
+

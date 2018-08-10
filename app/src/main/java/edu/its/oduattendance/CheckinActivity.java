@@ -90,7 +90,7 @@ public class CheckinActivity extends AppCompatActivity {
         builder.show();
     }
 
-//After shibboleth login is done..
+    //After shibboleth login is done..
     class RequestStudentInfo extends AsyncTask<String, Integer, String> {
 
         @Override
@@ -107,17 +107,17 @@ public class CheckinActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            System.out.println(" MY requests, Response for isStudent  " + result);
+            //   System.out.println(" MY requests, Response for isStudent  " + result);
 
             try {
 
                 JSONObject json = new JSONObject(result);
-                System.out.println( json.getString("details"));
+                //    System.out.println( json.getString("details"));
 
                 if (!json.isNull("details")){
 
-                    System.out.println("Valid JSON");
-                    System.out.println( json.getJSONArray("details").getJSONObject(0).getString("email"));
+                    //      System.out.println("Valid JSON");
+                    //      System.out.println( json.getJSONArray("details").getJSONObject(0).getString("email"));
 
                     id=json.getJSONArray("details").getJSONObject(0).getString("id");
                     first_name=json.getJSONArray("details").getJSONObject(0).getString("first_name");

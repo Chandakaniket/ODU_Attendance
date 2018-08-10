@@ -64,7 +64,7 @@ public class Checkin_list extends AppCompatActivity {
 
         Intent it=getIntent();
         midas=it.getStringExtra("midasid");
-        System.out.print("Demo==========="+midas);
+        // System.out.print("Demo==========="+midas);
 
         d_tv=(TextView)findViewById(R.id.date_tv);
         listView = (ListView) findViewById(R.id.list_view);
@@ -72,7 +72,7 @@ public class Checkin_list extends AppCompatActivity {
 
 
 
-       dbManager = new DBManager(this);
+        dbManager = new DBManager(this);
 
 
         dbManager.open();
@@ -80,13 +80,13 @@ public class Checkin_list extends AppCompatActivity {
 
 
 
-  adapter = new SimpleCursorAdapter(this, R.layout.activity_checkin_list, cursor, from, to, 0);
+        adapter = new SimpleCursorAdapter(this, R.layout.activity_checkin_list, cursor, from, to, 0);
 
-  adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
 
 
-    listView.setAdapter(adapter);
-    dbManager.close();
+        listView.setAdapter(adapter);
+        dbManager.close();
     }
 
     public void showDialogOnButtonClick(){
@@ -116,7 +116,7 @@ public class Checkin_list extends AppCompatActivity {
             year_x=year;
             month_x=month+1;
             day_x=day;
-          //  Toast.makeText(Checkin_list.this,year_x+"/"+month_x+"/"+day_x,Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(Checkin_list.this,year_x+"/"+month_x+"/"+day_x,Toast.LENGTH_SHORT).show();
 
             String date_s=month_x+"-"+day_x+"-"+year_x;
 
