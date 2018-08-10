@@ -244,8 +244,6 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
 
             startActivity(it);
             finish();
-
-
         }
     }
 
