@@ -34,8 +34,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         sharedPreferences=getPreferences(Context.MODE_PRIVATE);
-        midasId = (EditText) findViewById(R.id.midasId);
-        Password = (EditText) findViewById(R.id.Password);
+        midasId = findViewById(R.id.midasId);
+        Password = findViewById(R.id.Password);
 
 
         Intent it=getIntent();
@@ -47,16 +47,17 @@ public class MainActivity extends Activity {
             editor.commit();
         }
 
-        if(!sharedPreferences.getString("midasId","0").equals("0") && !sharedPreferences.getString("password","0").equals("0"))
+        if(!sharedPreferences.getString("midasId","0").equals("0"))
         {
-            midasId.setText(sharedPreferences.getString("midasId","0"));
-            Password.setText(sharedPreferences.getString("password","0"));
-            getLoginDetails(sharedPreferences.getString("midasId","0"), sharedPreferences.getString("password","0"));
+            Intent in = new Intent(getApplicationContext(), CheckinActivity.class);
+            in.putExtra("midasid",sharedPreferences.getString("midasId","0"));
+            startActivity(in);
+            finish();
 
         }
         System.out.println(sharedPreferences.getString("rememberMe","0"));
 
-        login_button = (Button) findViewById(R.id.login_button);
+        login_button = findViewById(R.id.login_button);
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,19 +65,12 @@ public class MainActivity extends Activity {
                 midas_id = midasId.getText().toString();
                 password = Password.getText().toString();
                 getLoginDetails(midas_id, password);
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("midasId",midas_id);
-                editor.putString("password",password);
-                editor.putString("rememberMe","true");
-                editor.commit();
-//@ac
             }
         });
 
 
         midas_id=sharedPreferences.getString("midasId","0");
-        System.out.println(sharedPreferences.getString("midasId","0")+"--"+sharedPreferences.getString("password","0"));
+
     }
 
     @Override
@@ -169,6 +163,14 @@ public class MainActivity extends Activity {
             System.out.println(" MY requests, Response from shibboleth: " + result);
             if (result.equals("200")) {
                 System.out.println("success login"); //Shib Auth done!!
+
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("midasId",midas_id);
+                editor.putString("rememberMe","true");
+                editor.commit();            //Storing midas_id for future login's
+
+
                 Intent in = new Intent(getApplicationContext(), CheckinActivity.class);
                 in.putExtra("midasid",midas_id);
                 startActivity(in);

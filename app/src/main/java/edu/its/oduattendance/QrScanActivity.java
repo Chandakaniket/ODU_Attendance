@@ -62,11 +62,8 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
 
     private static final String TAG = "BarcodeMain";
     String midas_id;
-    private static String deploy;
+
     private DBManager dbManager;
-
-
-    private SimpleCursorAdapter adapter;
 
     BarcodeCapture barcodeCapture;
 
@@ -77,15 +74,11 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
         setContentView(R.layout.activity_scan_qr);
 
 
-        new checkDeploy_type().execute();
-
-
         dbManager = new DBManager(this);
         dbManager.open();
 
         Intent res=getIntent();
         midas_id=res.getStringExtra("midasid");
-
 
 
         barcodeCapture = (BarcodeCapture) getSupportFragmentManager().findFragmentById(barcode);
@@ -121,7 +114,6 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
     }
 
 
-
     private String formatDataAsJSON(long formattedDate, String displayValue, String midas_id){
         final JSONObject jsonObject=new JSONObject();
         final JSONObject identifier=new JSONObject();
@@ -145,12 +137,7 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
         final String json=formatDataAsJSON(formattedDate, displayValue, midas_id);
         System.out.println("Json created is:"+json);
 
-
-
         new sendRequest().execute(json);
-
-
-
 
     }
 
@@ -189,9 +176,17 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
     private class sendRequest extends AsyncTask<String, Integer, String> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
         protected String doInBackground(String... params) {
             return getServerResponse(params[0]);
         }
+
+
+
         @Override
         protected void onPostExecute(String result) {
             System.out.println(" Response after Scanning QR : " + result);
@@ -271,11 +266,52 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
         int responseCode=0;
 
 
-        new checkDeploy_type().execute();
+        //new checkDeploy_type().execute();
 
+        String deployurlString="https://itsapps.odu.edu/services/f2f/status.json";
+        String result ;
+        String inputLine;
+
+        try{
+            URL deployurl=new URL(deployurlString);
+            HttpURLConnection connection1=(HttpURLConnection) deployurl.openConnection();
+            connection1.connect();
+
+            //Create a new InputStreamReader
+            InputStreamReader streamReader1 = new InputStreamReader(connection1.getInputStream());
+
+            //Create a new buffered reader and String Builder
+            BufferedReader reader1 = new BufferedReader(streamReader1);
+            StringBuilder stringBuilder1 = new StringBuilder();
+
+            //Check if the line we are reading is not null
+            while((inputLine = reader1.readLine()) != null){
+                stringBuilder1.append(inputLine);
+            }
+
+            result = stringBuilder1.toString();
+
+
+
+
+        }catch (IOException e) {
+            e.printStackTrace();
+            result=null;
+        }
 
         try {
-            if(deploy.equalsIgnoreCase("demo"))
+            JSONObject json1 = new JSONObject(result);
+            System.out.print(json1.getString("status"));
+            result=json1.getString("status");
+        }
+        catch (JSONException e) {
+            result=null;
+            e.printStackTrace();
+
+        }
+
+        try {
+            if(result != null && result.equalsIgnoreCase("demo"))
             {
                 URL url = new URL("https://esb.pprd.odu.edu:8443/attendance/0.0.1/attendance/submitAttendance");    //API Call to pre-prod ESB
                 connection = (HttpURLConnection) url.openConnection();
@@ -313,7 +349,7 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
             if(responseCode==200) {
                 InputStream stream = connection.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(stream));
-                String line = "";
+                String line;
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line);
                 }
@@ -326,60 +362,6 @@ public class QrScanActivity extends AppCompatActivity implements BarcodeRetrieve
 
     }
 
-    private static class checkDeploy_type extends AsyncTask<String, Integer, String> {
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            String url="https://itsapps.odu.edu/services/f2f/status.json";
-            String result ;
-            String inputLine;
-
-            try{
-                URL deployurl=new URL(url);
-                HttpURLConnection connection=(HttpURLConnection) deployurl.openConnection();
-                connection.connect();
-
-                //Create a new InputStreamReader
-                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-
-                //Create a new buffered reader and String Builder
-                BufferedReader reader = new BufferedReader(streamReader);
-                StringBuilder stringBuilder = new StringBuilder();
-
-                //Check if the line we are reading is not null
-                while((inputLine = reader.readLine()) != null){
-                    stringBuilder.append(inputLine);
-                }
-
-                result = stringBuilder.toString();
-
-            }catch (IOException e) {
-                e.printStackTrace();
-                result=null;
-            }
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            //  System.out.print("Deploy type  =  "+result);
-            try {
-                JSONObject json = new JSONObject(result);
-                System.out.print(json.getString("status"));
-                deploy=json.getString("status");
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }
 
 
