@@ -28,7 +28,7 @@ import edu.its.oduattendance.database.DataBaseHelper;
 
 public class Checkin_list extends AppCompatActivity {
 
-    Button btn;
+    Button btn_sel_date,btn_atn_history;
     TextView d_tv;
     int year_x,month_x,day_x;
     static final int dialog_id=0;
@@ -53,6 +53,7 @@ public class Checkin_list extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkin_list_blank);
 
+
         final Calendar cal=Calendar.getInstance();
         year_x=cal.get(Calendar.YEAR);
         month_x=cal.get(Calendar.MONTH);
@@ -69,7 +70,16 @@ public class Checkin_list extends AppCompatActivity {
         d_tv=(TextView)findViewById(R.id.date_tv);
         listView = (ListView) findViewById(R.id.list_view);
         listView.setEmptyView(findViewById(R.id.empty));
+        btn_atn_history=(Button)findViewById(R.id.btn_atn_hist);
 
+        btn_atn_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              Intent wint=new Intent(getApplicationContext(),AttendanceHistory.class);
+              wint.putExtra("midasid",midas);
+              startActivity(wint);
+            }
+        });
 
 
         dbManager = new DBManager(this);
@@ -91,8 +101,8 @@ public class Checkin_list extends AppCompatActivity {
 
     public void showDialogOnButtonClick(){
 
-        btn=(Button)findViewById(R.id.button2);
-        btn.setOnClickListener(new View.OnClickListener() {
+        btn_sel_date=(Button)findViewById(R.id.btn_sel_date);
+        btn_sel_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDialog(dialog_id);

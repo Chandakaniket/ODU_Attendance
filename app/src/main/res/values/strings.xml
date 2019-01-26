@@ -28,5 +28,6 @@
     <string name="atttypeimg">attendance image icon</string>
     <string name="date_sel_instruction">Date Selected is:- </string>
     <string name="date_btn">Select Date</string>
-    <string name="date_tv">Date Selected is:- Today</string>
+    <string name="date_tv"> Choose the date </string>
+    <string name="history">Attendance History</string>
 </resources>
