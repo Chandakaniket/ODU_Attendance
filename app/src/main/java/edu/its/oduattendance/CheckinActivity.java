@@ -116,13 +116,11 @@ public class CheckinActivity extends AppCompatActivity {
 
                 if (!json.isNull("details")){
 
-                    //      System.out.println("Valid JSON");
-                    //      System.out.println( json.getJSONArray("details").getJSONObject(0).getString("email"));
 
                     id=json.getJSONArray("details").getJSONObject(0).getString("id");
                     first_name=json.getJSONArray("details").getJSONObject(0).getString("first_name");
                     display_name=json.getJSONArray("details").getJSONObject(0).getString("displayName");
-                    email=json.getJSONArray("details").getJSONObject(0).getString("email");
+
 
                     welcome_tv.setText("Welcome, "+display_name+".");
 
